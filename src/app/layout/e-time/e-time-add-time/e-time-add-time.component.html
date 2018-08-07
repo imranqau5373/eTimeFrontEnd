@@ -1,0 +1,120 @@
+<div class="card mb-3">
+    <div class="card-header">      
+      
+      <form role="form">
+          <div class="row">
+              <div class="col-md-12">
+                <h3>Add eTime</h3>
+              </div>
+          </div>
+          &nbsp;
+              <div class="row">
+                <div class="col-md-4">
+                    <fieldset class="form-group">
+                        <label>Start Date</label>
+                        <div class="input-group datepicker-input">
+                            <input class="form-control" placeholder="dd-mm-yyyy"
+                                name="dpStart" ngbDatepicker #dStart="ngbDatepicker" [(ngModel)]="startDate" [ngModelOptions]="{standalone: true}">
+                            <button class="input-group-addon" (click)="dStart.toggle()" type="button">
+                                <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-4">
+                    <fieldset class="form-group">
+                        <label>End Date</label>
+                        <div class="input-group datepicker-input">
+                            <input class="form-control" placeholder="dd-mm-yyyy"
+                                name="dpEnd" ngbDatepicker #dEnd="ngbDatepicker" [(ngModel)]="endDate" [ngModelOptions]="{standalone: true}">
+                            <button class="input-group-addon" (click)="dEnd.toggle()" type="button">
+                                <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                                <span class="fa fa-calendar"></span>
+                            </button>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-4">
+                        <label>Project</label>
+                        <select class="form-control" name="activityId" [(ngModel)]="activityId" [ngModelOptions]="{standalone: true}">
+                            <option value="">-- Select Project --</option>
+                            <option *ngFor="let option of selectProject;" value="{{option.id}}">{{ option.name }}</option>
+                        </select>
+                    </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12">
+                      <button type="button" class="btn btn-primary" (click)="generateDates()" [disabled]="(!startDate || !endDate || !activityId)">Generate Dates</button>
+                  </div>
+              </div>
+            </form>
+      </div>           
+    </div>
+    <div class="card-body">
+        <form role="form">        
+        <div *ngIf="datesArray.length > 0">
+            <div class="row">
+                <div class="col-md-6">
+                        <h4>Dates</h4>
+                </div>
+                <div class="col-md-6 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveSessions()">Save</button>
+                </div>
+            </div>
+          
+          &nbsp;
+          <div class="row">
+            <table class="table borderless">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let date of datesArray; let i = index">
+                  <ng-container *ngIf="!date.delete">
+                  <td>
+                      <fieldset class="form-group margin-top">                          
+                          <div class="input-group datepicker-input w-50">
+                              <input class="form-control" placeholder="dd-mm-yyyy"
+                                  name="dpDate" ngbDatepicker #dDate="ngbDatepicker" [(ngModel)]="datesArray[i].date" [ngModelOptions]="{standalone: true}">
+                              <button class="input-group-addon" (click)="dDate.toggle()" type="button">
+                                  <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                                  <span class="fa fa-calendar"></span>
+                              </button>
+                          </div>
+                      </fieldset>
+                  </td>
+                  <td class="text-center">
+                      <fieldset class="form-group">
+                          <ngb-timepicker [(ngModel)]="datesArray[i].startTime" meridian="ON" [ngModelOptions]="{standalone: true}"></ngb-timepicker> 
+                      </fieldset>
+                  </td>
+                  <td class="text-center">
+                      <fieldset class="form-group">
+                          <ngb-timepicker [(ngModel)]="datesArray[i].endTime" meridian="ON" [ngModelOptions]="{standalone: true}"></ngb-timepicker> 
+                      </fieldset>                     
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-outline-danger btn-margin-top" (click)="DeleteDateRow(i)">Delete</button>
+                  </td>
+                </ng-container>
+                </tr>
+              </tbody>
+            </table>              
+          </div>
+          <div class="row">
+                <div class="col-md-6">
+                        
+                </div>
+                <div class="col-md-6 text-right">
+                        <button type="button" class="btn btn-primary" (click)="saveSessions()">Save</button>
+                </div>
+            </div>
+        </div>
+      </form>
+    </div>

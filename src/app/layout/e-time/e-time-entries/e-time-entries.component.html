@@ -1,0 +1,147 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <form role="form">
+    <div class="row">
+        <div class="col-md-12">
+          <h3>eTime Entries</h3>
+        </div>
+        &nbsp;
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+          <fieldset class="form-group">
+              <label>Start Date</label>
+              <div class="input-group datepicker-input">
+                  <input class="form-control" placeholder="dd-mm-yyyy"
+                      name="dpStart" ngbDatepicker #dStart="ngbDatepicker" [(ngModel)]="startDate" [ngModelOptions]="{standalone: true}">
+                  <button class="input-group-addon" (click)="dStart.toggle()" type="button">
+                      <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                      <span class="fa fa-calendar"></span>
+                  </button>
+              </div>
+          </fieldset>
+      </div>
+      <div class="col-md-4">
+          <fieldset class="form-group">
+              <label>End Date</label>
+              <div class="input-group datepicker-input">
+                  <input class="form-control" placeholder="dd-mm-yyyy"
+                      name="dpEnd" ngbDatepicker #dEnd="ngbDatepicker" [(ngModel)]="endDate" [ngModelOptions]="{standalone: true}">
+                  <button class="input-group-addon" (click)="dEnd.toggle()" type="button">
+                      <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                      <span class="fa fa-calendar"></span>
+                  </button>
+              </div>
+          </fieldset>
+      </div>
+      <div class="col-md-4">
+          <label>Project</label>
+          <select class="form-control" name="activityId" [(ngModel)]="activityId" [ngModelOptions]="{standalone: true}">
+            <option value="">-- Select Project --</option>
+            <option value="-1">All</option>
+            <option *ngFor="let option of selectProject;" value="{{option.id}}">{{ option.name }}</option>
+          </select>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" (click)="SearchSession()" [disabled]="!startDate || !endDate || !activityId">Filter</button>
+        </div>
+    </div>
+    </form>
+  </div>
+  <div class="card-body table-responsive" *ngIf="sessions.length > 0">
+      <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+              <th class="d-none">Session Id</th>
+              <th>Date</th>
+              <th>Project</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Total Hours</th>
+              <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let session of sessions;">
+                  <td class="d-none">{{ session.sessionId }}</td>
+                  <td>{{ session.sessionDate | date:'dd-MM-yy' }}</td>
+                  <td>{{ session.project }}</td>
+                  <td>{{ session.sessionStart }}</td>
+                  <td>{{ session.sessionEnd }}</td>                  
+                  <td>{{ session.SessionDuration }}</td>
+                  <td>
+                      <button type="button" class="btn btn-outline-primary" (click)="editSession(session, content)">Edit</button>
+                      &nbsp;
+                      <button type="button" class="btn btn-outline-danger" (click)="deleteSession(session.sessionId, delcontent)">Delete</button>
+                  </td>
+              </tr>                 
+          </tbody>
+      </table>
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit Entry</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+          <fieldset class="form-group">
+              <label>Date</label>
+              <div class="input-group datepicker-input">
+                  <input class="form-control" placeholder="dd-mm-yyyy"
+                      name="dpDate" ngbDatepicker #dDate="ngbDatepicker" [(ngModel)]="selectedDate" [ngModelOptions]="{standalone: true}">
+                  <button class="input-group-addon" (click)="dDate.toggle()" type="button">
+                      <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                      <span class="fa fa-calendar"></span>
+                  </button>
+              </div>
+          </fieldset>
+          <fieldset class="form-group">
+              <label>Project</label>
+              <select class="form-control" name="selectedActivityId" [(ngModel)]="selectedActivityId" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let option of selectProject;" value="{{option.id}}">{{ option.name }}</option>
+              </select>
+          </fieldset>
+          <div class="row">
+            <div class="col-md-6">
+                <fieldset class="form-group">
+                    <label>Start Time</label>
+                    <ngb-timepicker [(ngModel)]="startTime" meridian="ON" [ngModelOptions]="{standalone: true}"></ngb-timepicker> 
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+                <fieldset class="form-group">
+                    <label>End Time</label>
+                    <ngb-timepicker [(ngModel)]="endTime" meridian="ON" [ngModelOptions]="{standalone: true}"></ngb-timepicker> 
+                </fieldset>   
+            </div>
+          </div>         
+          
+                         
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="c('SaveClick')" [disabled]="!selectedDate || !startTime || !endTime">Save</button>
+    </div>
+  </ng-template>  
+  <ng-template #delcontent let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure to delete this entry?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" (click)="c('SaveClick')">Yes</button>
+             &nbsp;
+          <button type="button" class="btn btn-outline-secondary" (click)="d('Cross click')">No</button>
+        </div>
+      </ng-template>  

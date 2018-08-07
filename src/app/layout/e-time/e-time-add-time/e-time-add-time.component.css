@@ -1,0 +1,11 @@
+.borderless td, .borderless th {
+    border: none;
+}
+
+.margin-top{
+    margin-top: 12%;
+}
+
+.btn-margin-top{
+    margin-top: 36%;
+}
